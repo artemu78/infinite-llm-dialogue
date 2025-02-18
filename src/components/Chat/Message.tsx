@@ -1,5 +1,5 @@
-
 import { cn } from "@/lib/utils";
+import { Avatar } from "./Avatar";
 
 interface MessageProps {
   content: string;
@@ -11,7 +11,12 @@ interface MessageProps {
   isLoading?: boolean;
 }
 
-export const Message = ({ content, sender, timestamp, isLoading }: MessageProps) => {
+export const Message = ({
+  content,
+  sender,
+  timestamp,
+  isLoading,
+}: MessageProps) => {
   return (
     <div className="flex items-start space-x-3 animate-fade-up">
       <Avatar name={sender.name} color={sender.color} />
@@ -24,8 +29,18 @@ export const Message = ({ content, sender, timestamp, isLoading }: MessageProps)
           {isLoading ? (
             <span className="inline-flex items-center">
               <span className="animate-bounce">.</span>
-              <span className="animate-bounce" style={{ animationDelay: "0.2s" }}>.</span>
-              <span className="animate-bounce" style={{ animationDelay: "0.4s" }}>.</span>
+              <span
+                className="animate-bounce"
+                style={{ animationDelay: "0.2s" }}
+              >
+                .
+              </span>
+              <span
+                className="animate-bounce"
+                style={{ animationDelay: "0.4s" }}
+              >
+                .
+              </span>
             </span>
           ) : (
             content
