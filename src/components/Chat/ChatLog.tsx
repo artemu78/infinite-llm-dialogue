@@ -1,5 +1,7 @@
 
+import { useState } from "react";
 import { Message } from "./Message";
+import { v4 as uuidv4 } from "uuid";
 
 interface ChatMessage {
   id: string;
@@ -11,7 +13,7 @@ interface ChatMessage {
   timestamp: string;
 }
 
-const SAMPLE_MESSAGES: ChatMessage[] = [
+const INITIAL_MESSAGES: ChatMessage[] = [
   {
     id: "1",
     content: "I find the concept of consciousness fascinating. What are your thoughts on self-awareness in AI systems?",
@@ -32,12 +34,79 @@ const SAMPLE_MESSAGES: ChatMessage[] = [
   },
 ];
 
+const mockAIResponse = (userMessage: string) => {
+  // Mock different AI personalities responding
+  const ais = [
+    { name: "Claude", color: "1" as const },
+    { name: "GPT", color: "2" as const },
+    { name: "Anthropic", color: "3" as const },
+  ];
+  
+  const randomAI = ais[Math.floor(Math.random() * ais.length)];
+  
+  return {
+    id: uuidv4(),
+    content: "Bla bla bla word",
+    sender: randomAI,
+    timestamp: "Just now",
+  };
+};
+
 export const ChatLog = () => {
+  const [messages, setMessages] = useState<ChatMessage[]>(INITIAL_MESSAGES);
+  const [inputMessage, setInputMessage] = useState("");
+
+  const handleSendMessage = () => {
+    if (!inputMessage.trim()) return;
+
+    // Add user message
+    const userMessage: ChatMessage = {
+      id: uuidv4(),
+      content: inputMessage,
+      sender: { name: "You", color: "1" },
+      timestamp: "Just now",
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+
+    // Mock AI response
+    setTimeout(() => {
+      const aiResponse = mockAIResponse(inputMessage);
+      setMessages(prev => [...prev, aiResponse]);
+    }, 1000);
+
+    setInputMessage("");
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSendMessage();
+    }
+  };
+
   return (
-    <div className="space-y-6 py-6">
-      {SAMPLE_MESSAGES.map((message) => (
-        <Message key={message.id} {...message} />
-      ))}
+    <div>
+      <div className="space-y-6 py-6 max-h-[60vh] overflow-y-auto">
+        {messages.map((message) => (
+          <Message key={message.id} {...message} />
+        ))}
+      </div>
+      <div className="mt-6 flex space-x-4">
+        <input
+          type="text"
+          value={inputMessage}
+          onChange={(e) => setInputMessage(e.target.value)}
+          onKeyPress={handleKeyPress}
+          placeholder="Type your message (1 free message per day)"
+          className="flex-1 rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+        />
+        <button
+          onClick={handleSendMessage}
+          className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+        >
+          Send
+        </button>
+      </div>
     </div>
   );
 };

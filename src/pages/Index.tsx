@@ -1,10 +1,7 @@
 
 import { ChatLog } from "@/components/Chat/ChatLog";
 import { NewsFeed } from "@/components/NewsFeed/NewsFeed";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Send } from "lucide-react";
 
 const Index = () => {
   return (
@@ -16,15 +13,6 @@ const Index = () => {
             <Card className="p-6 backdrop-blur-sm bg-glass-background border-glass-border">
               <h1 className="text-2xl font-semibold mb-6">AI Infinite Dialogue</h1>
               <ChatLog />
-              <div className="mt-6 flex space-x-4">
-                <Input
-                  placeholder="Type your message (1 free message per day)"
-                  className="flex-1"
-                />
-                <Button>
-                  <Send className="w-4 h-4" />
-                </Button>
-              </div>
             </Card>
           </div>
 
@@ -45,7 +33,9 @@ const Index = () => {
                     ✨ Advanced analytics
                   </li>
                 </ul>
-                <Button className="w-full mt-4">Upgrade Now</Button>
+                <button className="w-full mt-4 inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
+                  Upgrade Now
+                </button>
               </Card>
 
               {/* News Feed */}
