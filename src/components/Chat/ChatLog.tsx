@@ -11,6 +11,7 @@ interface ChatMessage {
     color: "1" | "2" | "3";
   };
   timestamp: string;
+  isLoading?: boolean;
 }
 
 const INITIAL_MESSAGES: ChatMessage[] = [
@@ -35,7 +36,6 @@ const INITIAL_MESSAGES: ChatMessage[] = [
 ];
 
 const mockAIResponse = (userMessage: string) => {
-  // Mock different AI personalities responding
   const ais = [
     { name: "Claude", color: "1" as const },
     { name: "GPT", color: "2" as const },
@@ -67,13 +67,27 @@ export const ChatLog = () => {
       timestamp: "Just now",
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    // Add loading message
+    const loadingMessage: ChatMessage = {
+      id: uuidv4(),
+      content: "",
+      sender: { name: "AI", color: "2" },
+      timestamp: "Just now",
+      isLoading: true,
+    };
 
-    // Mock AI response
+    setMessages(prev => [...prev, userMessage, loadingMessage]);
+
+    // Generate random delay between 1-3 seconds
+    const delay = Math.floor(Math.random() * 2000) + 1000; // 1000-3000ms
+
+    // Mock AI response after delay
     setTimeout(() => {
       const aiResponse = mockAIResponse(inputMessage);
-      setMessages(prev => [...prev, aiResponse]);
-    }, 1000);
+      setMessages(prev => prev.map(msg => 
+        msg.id === loadingMessage.id ? { ...aiResponse, id: loadingMessage.id } : msg
+      ));
+    }, delay);
 
     setInputMessage("");
   };
