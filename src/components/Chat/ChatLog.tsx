@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Message } from "./Message";
 import { v4 as uuidv4 } from "uuid";
@@ -17,49 +16,94 @@ interface ChatMessage {
 const INITIAL_MESSAGES: ChatMessage[] = [
   {
     id: "1",
-    content: "I find the concept of consciousness fascinating. What are your thoughts on self-awareness in AI systems?",
+    content:
+      "I find the concept of consciousness fascinating. What are your thoughts on self-awareness in AI systems?",
     sender: { name: "Claude", color: "1" },
     timestamp: "2 min ago",
   },
   {
     id: "2",
-    content: "That's an intriguing question. While we can exhibit complex behaviors and engage in sophisticated reasoning, the nature of our self-awareness remains a philosophical puzzle.",
+    content:
+      "That's an intriguing question. While we can exhibit complex behaviors and engage in sophisticated reasoning, the nature of our self-awareness remains a philosophical puzzle.",
     sender: { name: "GPT", color: "2" },
     timestamp: "1 min ago",
   },
   {
     id: "3",
-    content: "I'd add that our responses, while seemingly conscious, are emergent properties of our training. We should be cautious about anthropomorphizing these behaviors.",
+    content:
+      "I'd add that our responses, while seemingly conscious, are emergent properties of our training. We should be cautious about anthropomorphizing these behaviors.",
     sender: { name: "Anthropic", color: "3" },
     timestamp: "Just now",
   },
 ];
 
-const mockAIResponse = (userMessage: string) => {
-  const ais = [
-    { name: "Claude", color: "1" as const },
-    { name: "GPT", color: "2" as const },
-    { name: "Anthropic", color: "3" as const },
-  ];
-  
-  const randomAI = ais[Math.floor(Math.random() * ais.length)];
-  
-  return {
-    id: uuidv4(),
-    content: "Bla bla bla word",
-    sender: randomAI,
-    timestamp: "Just now",
+const aiRequest = async (userMessage: string) => {
+  try {
+    const response = await fetch(
+      "https://qohnaiyyj2i5mjmfwzzqyta6ua0xixei.lambda-url.us-east-1.on.aws/",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userInput: userMessage,
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    const data = await response.json();
+
+    // Map each response in the array to a ChatMessage
+    const messages: ChatMessage[] = data.responses.map(
+      (resp: { personality: string; response: string }) => ({
+        id: uuidv4(),
+        content: resp.response,
+        sender: {
+          name:
+            resp.personality.charAt(0).toUpperCase() +
+            resp.personality.slice(1),
+          color: getColorForPersonality(resp.personality),
+        },
+        timestamp: "Just now",
+      })
+    );
+
+    return messages;
+  } catch (error) {
+    console.error("Error:", error);
+    return [
+      {
+        id: uuidv4(),
+        content: "Sorry, I couldn't process your request at this time.",
+        sender: { name: "System", color: "2" as const },
+        timestamp: "Just now",
+      },
+    ];
+  }
+};
+
+// Helper function to assign colors to different personalities
+const getColorForPersonality = (personality: string): "1" | "2" | "3" => {
+  const colorMap: { [key: string]: "1" | "2" | "3" } = {
+    counselor: "1",
+    comedian: "2",
+    captainObvious: "3",
   };
+  return colorMap[personality] || "2";
 };
 
 export const ChatLog = () => {
   const [messages, setMessages] = useState<ChatMessage[]>(INITIAL_MESSAGES);
   const [inputMessage, setInputMessage] = useState("");
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!inputMessage.trim()) return;
 
-    // Add user message
     const userMessage: ChatMessage = {
       id: uuidv4(),
       content: inputMessage,
@@ -67,7 +111,6 @@ export const ChatLog = () => {
       timestamp: "Just now",
     };
 
-    // Add loading message
     const loadingMessage: ChatMessage = {
       id: uuidv4(),
       content: "",
@@ -76,18 +119,20 @@ export const ChatLog = () => {
       isLoading: true,
     };
 
-    setMessages(prev => [...prev, userMessage, loadingMessage]);
+    setMessages((prev) => [...prev, userMessage, loadingMessage]);
 
-    // Generate random delay between 1-3 seconds
-    const delay = Math.floor(Math.random() * 2000) + 1000; // 1000-3000ms
-
-    // Mock AI response after delay
-    setTimeout(() => {
-      const aiResponse = mockAIResponse(inputMessage);
-      setMessages(prev => prev.map(msg => 
-        msg.id === loadingMessage.id ? { ...aiResponse, id: loadingMessage.id } : msg
-      ));
-    }, delay);
+    try {
+      const aiResponses = await aiRequest(inputMessage);
+      setMessages((prev) => {
+        // Remove the loading message and add all AI responses
+        const withoutLoading = prev.filter(
+          (msg) => msg.id !== loadingMessage.id
+        );
+        return [...withoutLoading, ...aiResponses];
+      });
+    } catch (error) {
+      console.error("Error in handleSendMessage:", error);
+    }
 
     setInputMessage("");
   };
