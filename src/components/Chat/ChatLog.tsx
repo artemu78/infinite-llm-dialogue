@@ -1,17 +1,7 @@
 import { useState } from "react";
 import { Message } from "./Message";
 import { v4 as uuidv4 } from "uuid";
-
-interface ChatMessage {
-  id: string;
-  content: string;
-  sender: {
-    name: string;
-    color: "1" | "2" | "3";
-  };
-  timestamp: string;
-  isLoading?: boolean;
-}
+import { aiRequest, type ChatMessage } from "@/lib/utils";
 
 const INITIAL_MESSAGES: ChatMessage[] = [
   {
@@ -36,56 +26,6 @@ const INITIAL_MESSAGES: ChatMessage[] = [
     timestamp: "Just now",
   },
 ];
-
-const aiRequest = async (userMessage: string) => {
-  try {
-    const response = await fetch(
-      "https://qohnaiyyj2i5mjmfwzzqyta6ua0xixei.lambda-url.us-east-1.on.aws/",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userInput: userMessage,
-        }),
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-
-    const data = await response.json();
-
-    // Map each response in the array to a ChatMessage
-    const messages: ChatMessage[] = data.responses.map(
-      (resp: { personality: string; response: string }) => ({
-        id: uuidv4(),
-        content: resp.response,
-        sender: {
-          name:
-            resp.personality.charAt(0).toUpperCase() +
-            resp.personality.slice(1),
-          color: getColorForPersonality(resp.personality),
-        },
-        timestamp: "Just now",
-      })
-    );
-
-    return messages;
-  } catch (error) {
-    console.error("Error:", error);
-    return [
-      {
-        id: uuidv4(),
-        content: "Sorry, I couldn't process your request at this time.",
-        sender: { name: "System", color: "2" as const },
-        timestamp: "Just now",
-      },
-    ];
-  }
-};
 
 // Helper function to assign colors to different personalities
 const getColorForPersonality = (personality: string): "1" | "2" | "3" => {

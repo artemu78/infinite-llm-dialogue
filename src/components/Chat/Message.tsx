@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Avatar } from "./Avatar";
+import ReactMarkdown from "react-markdown";
 
 interface MessageProps {
   content: string;
@@ -43,7 +44,7 @@ export const Message = ({
               </span>
             </span>
           ) : (
-            content
+            <ReactMarkdown className="prose prose-sm">{content}</ReactMarkdown>
           )}
         </p>
       </div>
