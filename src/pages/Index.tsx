@@ -1,6 +1,5 @@
-
 import { ChatLog } from "@/components/Chat/ChatLog";
-import { NewsFeed } from "@/components/NewsFeed/NewsFeed";
+import { NewsFeed } from "@/components/NewsFeed";
 import { Card } from "@/components/ui/card";
 
 const Index = () => {
@@ -11,7 +10,9 @@ const Index = () => {
           {/* Main Chat Section */}
           <div className="lg:col-span-2">
             <Card className="p-6 backdrop-blur-sm bg-glass-background border-glass-border">
-              <h1 className="text-2xl font-semibold mb-6">AI Infinite Dialogue</h1>
+              <h1 className="text-2xl font-semibold mb-6">
+                AI Infinite Dialogue
+              </h1>
               <ChatLog />
             </Card>
           </div>
@@ -21,7 +22,9 @@ const Index = () => {
             <div className="space-y-6">
               {/* Premium Features Card */}
               <Card className="p-6 backdrop-blur-sm bg-glass-background border-glass-border">
-                <h2 className="text-lg font-semibold mb-4">Upgrade to Premium</h2>
+                <h2 className="text-lg font-semibold mb-4">
+                  Upgrade to Premium
+                </h2>
                 <ul className="space-y-3">
                   <li className="flex items-center text-sm">
                     ✨ Unlimited messages
