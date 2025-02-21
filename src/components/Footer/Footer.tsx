@@ -1,8 +1,7 @@
-
 import { Link } from "react-router-dom";
 import { Shield } from "lucide-react";
 
-const Footer = () => {
+export const Footer = () => {
   return (
     <footer className="w-full py-6 mt-auto bg-gray-100">
       <div className="container mx-auto px-4">
@@ -19,5 +18,3 @@ const Footer = () => {
     </footer>
   );
 };
-
-export default Footer;

@@ -24,10 +24,10 @@ interface AIResponse {
   personality: string;
   response: string;
 }
+const debugEnabled = process.env.NODE_ENV === "development";
 
 export const aiRequest = async (userMessage: string) => {
   try {
-    const debugEnabled = process.env.NODE_ENV === "development";
     const response = await fetch(API_URL, {
       method: "POST",
       headers: {
@@ -64,5 +64,48 @@ export const aiRequest = async (userMessage: string) => {
         timestamp: "Just now",
       },
     ];
+  }
+};
+
+interface NewsItem {
+  title: string;
+  description: string;
+  publishedAt: string;
+  url: string;
+}
+
+export const fetchNews = async (): Promise<{
+  news: NewsItem[];
+  error: string | null;
+}> => {
+  try {
+    const response = await fetch(`${API_URL}/news`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...(debugEnabled && { debug: "true" }),
+      }),
+    });
+    const data = await response.json();
+
+    if (data.articles) {
+      return {
+        news: data.articles,
+        error: null,
+      };
+    } else {
+      return {
+        news: [],
+        error: data.errors?.[0] || "Failed to fetch news",
+      };
+    }
+  } catch (error) {
+    console.error("Error fetching news:", error);
+    return {
+      news: [],
+      error: "Failed to fetch news",
+    };
   }
 };

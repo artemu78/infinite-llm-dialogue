@@ -1,6 +1,7 @@
 import { ChatLog } from "@/components/Chat/ChatLog";
 import { NewsFeed } from "@/components/NewsFeed";
 import { Card } from "@/components/ui/card";
+import { Premium } from "@/components/Premium";
 
 const Index = () => {
   return (
@@ -20,31 +21,8 @@ const Index = () => {
           {/* Sidebar */}
           <div className="lg:col-span-1">
             <div className="space-y-6">
-              {/* Premium Features Card */}
-              <Card className="p-6 backdrop-blur-sm bg-glass-background border-glass-border">
-                <h2 className="text-lg font-semibold mb-4">
-                  Upgrade to Premium
-                </h2>
-                <ul className="space-y-3">
-                  <li className="flex items-center text-sm">
-                    ✨ Unlimited messages
-                  </li>
-                  <li className="flex items-center text-sm">
-                    ✨ Direct control over chat flow
-                  </li>
-                  <li className="flex items-center text-sm">
-                    ✨ Advanced analytics
-                  </li>
-                </ul>
-                <button className="w-full mt-4 inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
-                  Upgrade Now
-                </button>
-              </Card>
-
-              {/* News Feed */}
-              <Card className="p-6 backdrop-blur-sm bg-glass-background border-glass-border">
-                <NewsFeed />
-              </Card>
+              <Premium />
+              <NewsFeed />
             </div>
           </div>
         </div>

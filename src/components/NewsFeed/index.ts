@@ -1,1 +1,1 @@
-export * from "./NewsFeed";
+export { NewsFeed } from "./NewsFeed";
