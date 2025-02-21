@@ -13,7 +13,7 @@ export default defineConfig(({ mode }) => ({
   plugins: [react(), mode === "development" && componentTagger()].filter(
     Boolean
   ),
-  base: process.env.NODE_ENV === "production" ? "/infinite-llm-dialogue/" : "/",
+  base: mode === "production" ? "/infinite-llm-dialogue/" : "/",
   define: {
     "import.meta.env.VITE_APP_VERSION": JSON.stringify(version),
   },
