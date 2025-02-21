@@ -26,7 +26,7 @@ export const Message = ({
           <span className="font-medium">{sender.name}</span>
           <span className="text-sm text-gray-500">{timestamp}</span>
         </div>
-        <p className="mt-1 text-gray-800">
+        <div className="mt-1 text-gray-800">
           {isLoading ? (
             <span className="inline-flex items-center">
               <span className="animate-bounce">.</span>
@@ -46,7 +46,7 @@ export const Message = ({
           ) : (
             <ReactMarkdown className="prose prose-sm">{content}</ReactMarkdown>
           )}
-        </p>
+        </div>
       </div>
     </div>
   );

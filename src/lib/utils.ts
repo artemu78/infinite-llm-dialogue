@@ -6,6 +6,9 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+const API_URL =
+  "https://qohnaiyyj2i5mjmfwzzqyta6ua0xixei.lambda-url.us-east-1.on.aws";
+
 export interface ChatMessage {
   id: string;
   content: string;
@@ -25,19 +28,16 @@ interface AIResponse {
 export const aiRequest = async (userMessage: string) => {
   try {
     const debugEnabled = process.env.NODE_ENV === "development";
-    const response = await fetch(
-      "https://qohnaiyyj2i5mjmfwzzqyta6ua0xixei.lambda-url.us-east-1.on.aws/",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userInput: userMessage,
-          ...(debugEnabled && { debug: "true" }),
-        }),
-      }
-    );
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userInput: userMessage,
+        ...(debugEnabled && { debug: "true" }),
+      }),
+    });
 
     if (!response.ok) {
       throw new Error("Network response was not ok");

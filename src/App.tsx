@@ -7,7 +7,7 @@ import Index from "./pages/Index";
 import Privacy from "./pages/Privacy";
 import NotFound from "./pages/NotFound";
 import Footer from "./components/Footer";
-import { NewsFeed } from "./components/NewsFeed";
+import { NewsFeed } from "./components/NewsFeed/NewsFeed";
 
 const queryClient = new QueryClient();
 
