@@ -19,13 +19,16 @@ const App = () => {
     console.log(`App version: ${version}`);
   }, []);
 
+  const isProduction = import.meta.env.MODE === "production";
+  const basename = isProduction ? "/infinite-llm-dialogue" : "/";
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <div className="min-h-screen flex flex-col">
           <Toaster />
           <Sonner />
-          <BrowserRouter>
+          <BrowserRouter basename={basename}>
             <div className="flex-1">
               <Routes>
                 <Route path="/" element={<Index />} />
