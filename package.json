@@ -1,7 +1,7 @@
 {
   "name": "vite_react_shadcn_ts",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "start": "vite",
@@ -12,7 +12,7 @@
     "preview": "vite preview",
     "predeploy": "npm run build",
     "prepare": "husky install",
-    "bump-version": "tsx scripts/bumpVersion.ts"
+    "bump-version": "node scripts/bumpVersion.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
