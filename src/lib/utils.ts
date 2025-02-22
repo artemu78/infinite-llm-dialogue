@@ -9,21 +9,26 @@ export function cn(...inputs: ClassValue[]) {
 export interface ChatMessage {
   id: string;
   content: string;
-  sender: {
-    name: string;
-    color: "1" | "2" | "3";
-  };
-  timestamp: string;
+  sender: string;
+  timestamp: number;
   isLoading?: boolean;
 }
 
-interface AIResponse {
+interface AIPersonalityResponse {
   personality: string;
   response: string;
 }
+
+interface AIResponse {
+  responses: AIPersonalityResponse[];
+}
+
 const debugEnabled = process.env.NODE_ENV === "development";
 
-export const aiRequest = async (userInput: string, userName: string) => {
+export const aiRequest = async (
+  userInput: string,
+  userName: string
+): Promise<ChatMessage[]> => {
   try {
     const response = await fetch(API_URL, {
       method: "POST",
@@ -40,17 +45,14 @@ export const aiRequest = async (userInput: string, userName: string) => {
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
-    const data = await response.json();
+    const data: AIResponse = await response.json();
 
     // Transform the AI responses into ChatMessage format
-    return data.responses.map((aiResponse: AIResponse) => ({
+    return data.responses.map((aiResponse: AIPersonalityResponse) => ({
       id: uuidv4(),
       content: aiResponse.response,
-      sender: {
-        name: aiResponse.personality,
-        color: "2" as const,
-      },
-      timestamp: "Just now",
+      sender: aiResponse.personality,
+      timestamp: new Date().getTime(),
     }));
   } catch (error) {
     console.error("Error:", error);
@@ -58,8 +60,8 @@ export const aiRequest = async (userInput: string, userName: string) => {
       {
         id: uuidv4(),
         content: "Sorry, I couldn't process your request at this time.",
-        sender: { name: "System", color: "2" as const },
-        timestamp: "Just now",
+        sender: "System",
+        timestamp: new Date().getTime(),
       },
     ];
   }

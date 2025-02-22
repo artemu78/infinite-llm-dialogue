@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Message } from "./Message";
 import { v4 as uuidv4 } from "uuid";
 import { aiRequest, type ChatMessage } from "@/lib/utils";
 import { getUserName } from "@/lib/userUtils";
+import { getChat } from "@/lib/api";
+
+const userName = getUserName();
 
 // Helper function to assign colors to different personalities
 const getColorForPersonality = (personality: string): "1" | "2" | "3" => {
@@ -18,7 +21,18 @@ export const ChatLog = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputMessage, setInputMessage] = useState("");
 
-  const userName = getUserName();
+  useEffect(() => {
+    const fetchInitialChat = async () => {
+      try {
+        const response = await getChat({ message: "Hello" });
+        setMessages(response);
+      } catch (error) {
+        console.error("Error fetching chat:", error);
+      }
+    };
+
+    fetchInitialChat();
+  }, []); // Empty dependency array means this runs once on component mount
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim()) return;
@@ -26,15 +40,15 @@ export const ChatLog = () => {
     const userMessage: ChatMessage = {
       id: uuidv4(),
       content: inputMessage,
-      sender: { name: userName, color: "1" },
-      timestamp: "Just now",
+      sender: userName,
+      timestamp: new Date().getTime(),
     };
 
     const loadingMessage: ChatMessage = {
       id: uuidv4(),
       content: "",
-      sender: { name: "AI", color: "2" },
-      timestamp: "Just now",
+      sender: userName,
+      timestamp: new Date().getTime(),
       isLoading: true,
     };
 
@@ -61,7 +75,6 @@ export const ChatLog = () => {
       handleSendMessage();
     }
   };
-
   return (
     <div>
       <div className="space-y-6 py-6 max-h-[60vh] overflow-y-auto">
