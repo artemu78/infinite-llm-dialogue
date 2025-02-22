@@ -26,7 +26,7 @@ interface AIResponse {
 }
 const debugEnabled = process.env.NODE_ENV === "development";
 
-export const aiRequest = async (userMessage: string) => {
+export const aiRequest = async (userInput: string, userName: string) => {
   try {
     const response = await fetch(API_URL, {
       method: "POST",
@@ -34,7 +34,8 @@ export const aiRequest = async (userMessage: string) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        userInput: userMessage,
+        userInput,
+        userName,
         ...(debugEnabled && { debug: "true" }),
       }),
     });

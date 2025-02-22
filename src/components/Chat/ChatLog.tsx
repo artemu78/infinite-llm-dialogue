@@ -2,30 +2,7 @@ import { useState } from "react";
 import { Message } from "./Message";
 import { v4 as uuidv4 } from "uuid";
 import { aiRequest, type ChatMessage } from "@/lib/utils";
-
-const INITIAL_MESSAGES: ChatMessage[] = [
-  {
-    id: "1",
-    content:
-      "I find the concept of consciousness fascinating. What are your thoughts on self-awareness in AI systems?",
-    sender: { name: "Claude", color: "1" },
-    timestamp: "2 min ago",
-  },
-  {
-    id: "2",
-    content:
-      "That's an intriguing question. While we can exhibit complex behaviors and engage in sophisticated reasoning, the nature of our self-awareness remains a philosophical puzzle.",
-    sender: { name: "GPT", color: "2" },
-    timestamp: "1 min ago",
-  },
-  {
-    id: "3",
-    content:
-      "I'd add that our responses, while seemingly conscious, are emergent properties of our training. We should be cautious about anthropomorphizing these behaviors.",
-    sender: { name: "Anthropic", color: "3" },
-    timestamp: "Just now",
-  },
-];
+import { getUserName } from "@/lib/userUtils";
 
 // Helper function to assign colors to different personalities
 const getColorForPersonality = (personality: string): "1" | "2" | "3" => {
@@ -38,8 +15,10 @@ const getColorForPersonality = (personality: string): "1" | "2" | "3" => {
 };
 
 export const ChatLog = () => {
-  const [messages, setMessages] = useState<ChatMessage[]>(INITIAL_MESSAGES);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputMessage, setInputMessage] = useState("");
+
+  const userName = getUserName();
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim()) return;
@@ -47,7 +26,7 @@ export const ChatLog = () => {
     const userMessage: ChatMessage = {
       id: uuidv4(),
       content: inputMessage,
-      sender: { name: "You", color: "1" },
+      sender: { name: userName, color: "1" },
       timestamp: "Just now",
     };
 
@@ -62,7 +41,7 @@ export const ChatLog = () => {
     setMessages((prev) => [...prev, userMessage, loadingMessage]);
 
     try {
-      const aiResponses = await aiRequest(inputMessage);
+      const aiResponses = await aiRequest(inputMessage, userName);
       setMessages((prev) => {
         // Remove the loading message and add all AI responses
         const withoutLoading = prev.filter(

@@ -1,6 +1,11 @@
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
-export const Premium = () => {
+
+interface PremiumProps {
+  className?: string;
+}
+
+export const Premium = ({ className }: PremiumProps) => {
   const handleUpgrade = () => {
     // tailwind toast
     toast.error("Not implemented. Please check back soon.", {
@@ -9,7 +14,11 @@ export const Premium = () => {
     });
   };
   return (
-    <Card className="p-6 backdrop-blur-sm bg-glass-background border-glass-border">
+    <div
+      className={`p-6 backdrop-blur-sm bg-glass-background border-glass-border ${
+        className || ""
+      }`}
+    >
       <h2 className="text-lg font-semibold mb-4">Upgrade to Premium</h2>
       <ul className="space-y-3">
         <li className="flex items-center text-sm">✨ Unlimited messages</li>
@@ -24,6 +33,6 @@ export const Premium = () => {
       >
         Upgrade Now
       </button>
-    </Card>
+    </div>
   );
 };

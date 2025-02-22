@@ -1,0 +1,22 @@
+.header {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  background-color: hsl(var(--background));
+  border-bottom: 1px solid hsl(var(--border));
+  z-index: 100;
+}
+
+.headerContent {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-weight: 600;
+  font-size: 1.25rem;
+}

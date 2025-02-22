@@ -8,6 +8,8 @@ import Privacy from "./pages/Privacy";
 import NotFound from "./pages/NotFound";
 import { Footer } from "./components/Footer/Footer";
 import { useEffect } from "react";
+import styles from "./App.module.css";
+import { Header } from "./components/Header/Header";
 
 // Import version from package.json
 const version = import.meta.env.VITE_APP_VERSION || "0.0.0";
@@ -25,18 +27,19 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <div className="min-h-screen flex flex-col">
+        <div className={styles.appContainer}>
           <Toaster />
           <Sonner />
           <BrowserRouter basename={basename}>
-            <div className="flex-1">
+            <Header />
+            <main className={styles.mainContent}>
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/privacy" element={<Privacy />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
-            </div>
+            </main>
             <Footer />
           </BrowserRouter>
         </div>

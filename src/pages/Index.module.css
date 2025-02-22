@@ -1,0 +1,35 @@
+.container {
+  display: flex;
+  height: 100%;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.chatSection {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.chatContent {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.sidebar {
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.premium {
+  flex-shrink: 0;
+  margin-bottom: 1rem;
+}
+
+.newsFeedContainer {
+  flex: 1;
+  overflow-y: auto;
+}
