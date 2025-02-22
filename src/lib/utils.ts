@@ -1,13 +1,12 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { v4 as uuidv4 } from "uuid";
 import { API_URL } from "@/config";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 export interface ChatMessage {
-  id: string;
+  id?: number;
   content: string;
   sender: string;
   timestamp: number;
@@ -49,7 +48,7 @@ export const aiRequest = async (
 
     // Transform the AI responses into ChatMessage format
     return data.responses.map((aiResponse: AIPersonalityResponse) => ({
-      id: uuidv4(),
+      id: new Date().getTime(),
       content: aiResponse.response,
       sender: aiResponse.personality,
       timestamp: new Date().getTime(),
@@ -58,7 +57,7 @@ export const aiRequest = async (
     console.error("Error:", error);
     return [
       {
-        id: uuidv4(),
+        id: new Date().getTime(),
         content: "Sorry, I couldn't process your request at this time.",
         sender: "System",
         timestamp: new Date().getTime(),

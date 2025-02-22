@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Message } from "./Message";
-import { v4 as uuidv4 } from "uuid";
+
 import { aiRequest, type ChatMessage } from "@/lib/utils";
 import { getUserName } from "@/lib/userUtils";
 import { getChat } from "@/lib/api";
@@ -38,16 +38,15 @@ export const ChatLog = () => {
     if (!inputMessage.trim()) return;
 
     const userMessage: ChatMessage = {
-      id: uuidv4(),
       content: inputMessage,
       sender: userName,
       timestamp: new Date().getTime(),
     };
 
     const loadingMessage: ChatMessage = {
-      id: uuidv4(),
-      content: "",
-      sender: userName,
+      id: new Date().getTime(),
+      content: "Thinking...",
+      sender: "System",
       timestamp: new Date().getTime(),
       isLoading: true,
     };
