@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import { fetchNews } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { ChevronDown } from "lucide-react";
 
 interface NewsItem {
   title: string;
@@ -13,6 +19,7 @@ export function NewsFeed() {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isOpen, setIsOpen] = useState(true);
 
   useEffect(() => {
     const getNews = async () => {
@@ -41,27 +48,43 @@ export function NewsFeed() {
   }
 
   return (
-    <Card className="p-6 backdrop-blur-sm bg-glass-background border-glass-border">
-      <div className="space-y-4 p-4">
-        <h2 className="text-xl font-semibold mb-4">AI News</h2>
-        {news.map((item, index) => (
-          <a
-            key={index}
-            href={item.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block p-4 border rounded-lg hover:bg-gray-50 transition-colors"
-          >
-            <h3 className="font-medium text-lg mb-1">{item.title}</h3>
-            <p className="text-sm text-gray-500 mb-2">
-              {new Date(item.publishedAt).toLocaleDateString()}
-            </p>
-            <p className="text-sm text-gray-600 line-clamp-2">
-              {item.description}
-            </p>
-          </a>
-        ))}
-      </div>
+    <Card className="py-4 backdrop-blur-sm bg-glass-background border-glass-border">
+      <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+        <div className="px-4">
+          <div className="flex items-center justify-between">
+            <CollapsibleTrigger className="flex items-center justify-between w-full">
+              <h2 className="text-xl font-semibold">AI News</h2>
+
+              <ChevronDown
+                className={`h-4 w-4 transition-transform ${
+                  isOpen ? "transform rotate-180" : ""
+                }`}
+              />
+            </CollapsibleTrigger>
+          </div>
+          <CollapsibleContent className="mt-4">
+            <article className="space-y-4">
+              {news.map((item, index) => (
+                <a
+                  key={index}
+                  href={item.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block py-4 border-t hover:bg-gray-50 transition-colors"
+                >
+                  <h3 className="font-medium text-lg mb-1">{item.title}</h3>
+                  <p className="text-sm text-gray-500 mb-2">
+                    {new Date(item.publishedAt).toLocaleDateString()}
+                  </p>
+                  <p className="text-sm text-gray-600 line-clamp-2">
+                    {item.description}
+                  </p>
+                </a>
+              ))}
+            </article>
+          </CollapsibleContent>
+        </div>
+      </Collapsible>
     </Card>
   );
 }

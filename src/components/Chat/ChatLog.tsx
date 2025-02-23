@@ -24,7 +24,7 @@ export const ChatLog = () => {
   useEffect(() => {
     const fetchInitialChat = async () => {
       try {
-        const response = await getChat({ message: "Hello" });
+        const response = await getChat({});
         setMessages(response);
       } catch (error) {
         console.error("Error fetching chat:", error);
@@ -77,8 +77,8 @@ export const ChatLog = () => {
   return (
     <div>
       <div className="space-y-6 py-6 max-h-[60vh] overflow-y-auto">
-        {messages.map((message) => (
-          <Message key={message.id} {...message} />
+        {messages.map((message, index) => (
+          <Message key={message.id + index} {...message} />
         ))}
       </div>
       <div className="mt-6 flex space-x-4">

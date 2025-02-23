@@ -8,7 +8,7 @@ export interface ChatResponse {
 }
 
 export interface ChatRequest {
-  message: string;
+  message?: string;
   // Add other request fields as needed
 }
 
