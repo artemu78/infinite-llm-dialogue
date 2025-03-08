@@ -80,3 +80,42 @@
   background-color: #e0e0e0;
   border: 2px solid #ccc;
 }
+
+.header {
+  /* existing styles */
+}
+
+.headerContent {
+  /* existing styles */
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.userName {
+  color: #444444;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.loginButton {
+  padding: 8px 16px;
+  background-color: #4285f4; /* Google blue */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.loginButton:hover {
+  background-color: #357abd;
+}
