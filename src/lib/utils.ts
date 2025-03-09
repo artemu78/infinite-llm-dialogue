@@ -29,8 +29,6 @@ interface AIResponse {
   responses: AIPersonalityResponse[];
 }
 
-const debugEnabled = process.env.NODE_ENV === "development";
-
 export const aiRequest = async (
   userInput: string,
   userName: string,
@@ -46,15 +44,19 @@ export const aiRequest = async (
       body: JSON.stringify({
         userInput,
         userName,
-        ...(debugEnabled && { debug: "true" }),
+        ...(isDebugMode() && { debug: "true" }),
       }),
     });
-
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
     const data: AIResponse = await response.json();
 
+    if (!response.ok) {
+      if (response.status === 429) {
+        alert("You are being rate limited. Please try again later.\n" + data.error);
+      }
+      throw new Error("Network response was not ok.");
+    }
+    
+    
     // Transform the AI responses into ChatMessage format
     return data.responses.map((aiResponse: AIPersonalityResponse) => ({
       id: new Date().getTime(),
@@ -94,7 +96,7 @@ export const fetchNews = async (user: User): Promise<{
         "authorization": `Bearer ${user?.access_token}`,
       },
       body: JSON.stringify({
-        ...(debugEnabled && { debug: "true" }),
+        ...(isDebugMode() && { debug: "true" }),
       }),
     });
     const data = await response.json();

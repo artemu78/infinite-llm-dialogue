@@ -6,6 +6,7 @@ import { useAtom } from 'jotai';
 import { isDebugMode } from "@/lib/utils";
 
 const userName = getUserName();
+const CHAT_MESSAGES_DELAY_SEC = 60;
 
 interface ChatInputProps {
     inputMessage: string;
@@ -76,8 +77,8 @@ export const ChatInput: React.FC<ChatInputProps> = ({
             console.error("Error in handleSendMessage:", error);
         } finally {
             setInputMessage("");
-            setCountdown(60); // Start the 1-minute countdown
-            setButtonLabel("Send (60s)");
+            setCountdown(CHAT_MESSAGES_DELAY_SEC); // Start the 1-minute countdown
+            setButtonLabel(`Send (${CHAT_MESSAGES_DELAY_SEC}s)`);
         }
     };
 
