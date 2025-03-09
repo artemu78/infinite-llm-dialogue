@@ -38,8 +38,12 @@ export function NewsFeed() {
     user && getNews();
   }, [user]);
 
-  if (isLoading) {
+  if (isLoading && user) {
     return <div className="p-4">Loading news...</div>;
+  }
+
+  if (!user) {
+    return <div className="p-4 text-gray-500">Please log in to see news</div>;
   }
 
   if (error) {

@@ -113,7 +113,7 @@ export const Header: React.FC = () => {
           </div>
           <div className={styles.logo}>Infinite LLM Dialogue</div>
           <div className={styles.user}>
-            <span className={styles.userChatName}>{userName}</span>
+            <span className={styles.userChatName}>Welcome <i>{userName}</i></span>
             {user ? (
               <div
                 className={styles.userContainer}
