@@ -11,8 +11,8 @@
     "preview": "vite preview",
     "predeploy": "npm run build",
     "prepare": "husky install",
-    "bump-version-patch": "standard-version --release-as patch",
-    "bump-version-minor": "standard-version --release-as minor"
+    "bump-version-patch": "npm version patch --no-git-tag-version",
+    "bump-version-minor": "npm version minor --no-git-tag-version"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
