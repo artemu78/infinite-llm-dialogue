@@ -1,53 +1,57 @@
 import { useState, useEffect, useRef } from "react";
 import { GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";
+import { atom, useAtom } from 'jotai';
 import styles from "./Header.module.css";
 import { AboutModal } from "../Modal/AboutModal";
+import type { User } from "@/lib/types";
+import { userAtom } from "@/lib/atoms";
+import { getUserName } from "@/lib/userUtils";
+import { isDebugMode } from "@/lib/utils";
+
+const userName = getUserName();
 
 const GOOGLE_CLIENT_ID = "20534293634-9u6slp5sf1bv4cn3o54sadvhqsk53epb.apps.googleusercontent.com";
 
-// Utility function to check for "debug" URL parameter
-const isDebugMode = () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.has("debug");
-};
-
-interface User {
-  name: string;
-  picture: string;
-}
-
 interface LoginButtonProps {
-  onSuccess: (userData: User) => void;
+  setAtomValue: (userData: User) => void;
 }
 
 // LoginButton component
-const LoginButton: React.FC<LoginButtonProps> = ({ onSuccess }) => {
+const LoginButton: React.FC<LoginButtonProps> = ({ setAtomValue }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      const userInfo = await fetch(
-        "https://www.googleapis.com/oauth2/v3/userinfo",
-        {
-          headers: {
-            Authorization: `Bearer ${tokenResponse.access_token}`,
-          },
-        }
-      );
-      const userData: User = await userInfo.json();
-      if (isDebugMode()) {
-        console.log("Login successful:", userData);
+      isDebugMode() && console.log("Login successful:", tokenResponse);
+      setIsLoading(true);
+      try {
+        const userInfo = await fetch(
+          "https://www.googleapis.com/oauth2/v3/userinfo",
+          {
+            headers: {
+              Authorization: `Bearer ${tokenResponse.access_token}`,
+            },
+          }
+        );
+        const userData: User = await userInfo.json();
+        isDebugMode() && console.log("Login successful:", userData);
+        setAtomValue({...userData, access_token: tokenResponse.access_token});
+      } catch (error) {
+        isDebugMode() && console.log("Login Failed:", error);
+      } finally {
+        setIsLoading(false);
       }
-      onSuccess(userData);
     },
     onError: (error) => {
       if (isDebugMode()) {
         console.log("Login Failed:", error);
       }
+      alert("Login failed. Please try again.");
     },
   });
 
   return (
-    <button className={styles.loginButton} onClick={() => login()}>
-      Login with Google
+    <button className={styles.loginButton} onClick={() => login()} disabled={isLoading}>
+      {isLoading ? 'Logging in...' : 'Login with Google'}
     </button>
   );
 };
@@ -56,7 +60,7 @@ const LoginButton: React.FC<LoginButtonProps> = ({ onSuccess }) => {
 export const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isAboutModalOpen, setIsAboutModalOpen] = useState<boolean>(false);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useAtom(userAtom) as [User | null, (value: User | null) => void];
   const [isUserMenuOpen, setIsUserMenuOpen] = useState<boolean>(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
 
@@ -73,13 +77,6 @@ export const Header: React.FC = () => {
     };
   }, [userMenuRef]);
 
-  const handleLoginSuccess = (userData: User) => {
-    setUser({
-      name: userData.name,
-      picture: userData.picture,
-    });
-  };
-
   const handleLogout = () => {
     setUser(null);
     setIsUserMenuOpen(false);
@@ -93,6 +90,8 @@ export const Header: React.FC = () => {
             <button
               className={styles.burgerButton}
               onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="Toggle menu"
+              aria-expanded={isMenuOpen}
             >
               <span></span>
               <span></span>
@@ -114,6 +113,7 @@ export const Header: React.FC = () => {
           </div>
           <div className={styles.logo}>Infinite LLM Dialogue</div>
           <div className={styles.user}>
+            <span className={styles.userChatName}>{userName}</span>
             {user ? (
               <div
                 className={styles.userContainer}
@@ -139,7 +139,7 @@ export const Header: React.FC = () => {
                 )}
               </div>
             ) : (
-              <LoginButton onSuccess={handleLoginSuccess} />
+              <LoginButton setAtomValue={setUser} />
             )}
           </div>
         </div>

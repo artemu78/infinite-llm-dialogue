@@ -1,6 +1,13 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { API_URL } from "@/config";
+import type { User } from "@/lib/types";
+
+// Utility function to check for "debug" URL parameter
+export const isDebugMode = () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.has("debug");
+};
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -26,13 +33,15 @@ const debugEnabled = process.env.NODE_ENV === "development";
 
 export const aiRequest = async (
   userInput: string,
-  userName: string
+  userName: string,
+  user?: User
 ): Promise<ChatMessage[]> => {
   try {
     const response = await fetch(API_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "authorization": `Bearer ${user?.access_token}`,
       },
       body: JSON.stringify({
         userInput,

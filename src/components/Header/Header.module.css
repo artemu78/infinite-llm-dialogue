@@ -162,3 +162,7 @@
 .userContainer:hover {
   background-color: #858585;
 }
+
+.userChatName {
+  color: #444444;
+}
