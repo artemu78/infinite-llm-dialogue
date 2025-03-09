@@ -82,7 +82,7 @@ interface NewsItem {
   url: string;
 }
 
-export const fetchNews = async (): Promise<{
+export const fetchNews = async (user: User): Promise<{
   news: NewsItem[];
   error: string | null;
 }> => {
@@ -91,6 +91,7 @@ export const fetchNews = async (): Promise<{
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "authorization": `Bearer ${user?.access_token}`,
       },
       body: JSON.stringify({
         ...(debugEnabled && { debug: "true" }),

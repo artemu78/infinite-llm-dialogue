@@ -1,3 +1,5 @@
+import { useAtom } from 'jotai';
+import { userAtom } from "@/lib/atoms";
 import { useEffect, useState } from "react";
 import { fetchNews } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
@@ -16,6 +18,7 @@ interface NewsItem {
 }
 
 export function NewsFeed() {
+  const [user] = useAtom(userAtom);
   const [news, setNews] = useState<NewsItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -24,7 +27,7 @@ export function NewsFeed() {
   useEffect(() => {
     const getNews = async () => {
       try {
-        const { news: fetchedNews, error: fetchError } = await fetchNews();
+        const { news: fetchedNews, error: fetchError } = await fetchNews(user);
         setNews(fetchedNews);
         setError(fetchError);
       } finally {
@@ -32,8 +35,8 @@ export function NewsFeed() {
       }
     };
 
-    getNews();
-  }, []);
+    user && getNews();
+  }, [user]);
 
   if (isLoading) {
     return <div className="p-4">Loading news...</div>;

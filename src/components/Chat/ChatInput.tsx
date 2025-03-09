@@ -4,7 +4,6 @@ import { getUserName } from "@/lib/userUtils";
 import { userAtom } from "@/lib/atoms";
 import { useAtom } from 'jotai';
 import { isDebugMode } from "@/lib/utils";
-import { set } from "date-fns";
 
 const userName = getUserName();
 

@@ -1,3 +1,5 @@
+import { useAtom } from 'jotai';
+import { userAtom } from "@/lib/atoms";
 import { useState, useEffect } from "react";
 import { Message } from "./Message";
 import { ChatInput } from "./ChatInput";
@@ -15,21 +17,22 @@ const getColorForPersonality = (personality: string): "1" | "2" | "3" => {
 };
 
 export const ChatLog = () => {
+  const [user] = useAtom(userAtom);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputMessage, setInputMessage] = useState("");
 
   useEffect(() => {
     const fetchInitialChat = async () => {
       try {
-        const response = await getChat({});
+        const response = await getChat({}, user);
         setMessages(response);
       } catch (error) {
         console.error("Error fetching chat:", error);
       }
     };
 
-    fetchInitialChat();
-  }, []);
+    user && fetchInitialChat();
+  }, [user]);
   
   return (
     <div>

@@ -6,18 +6,20 @@ export interface ChatResponse {
   datetime: number;
   sender: string;
 }
+import type { User } from "@/lib/types";
 
 export interface ChatRequest {
   message?: string;
   // Add other request fields as needed
 }
 
-export async function getChat(request: ChatRequest): Promise<ChatMessage[]> {
+export async function getChat(request: ChatRequest, user: User): Promise<ChatMessage[]> {
   try {
     const response = await fetch(`${API_URL}/getchat`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "authorization": `Bearer ${user?.access_token}`,
       },
       body: JSON.stringify(request),
     });
