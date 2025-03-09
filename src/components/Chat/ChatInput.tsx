@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState, useEffect } from "react";
 import { aiRequest, type ChatMessage } from "@/lib/utils";
 import { getUserName } from "@/lib/userUtils";
 import { userAtom } from "@/lib/atoms";
@@ -18,9 +18,30 @@ export const ChatInput: React.FC<ChatInputProps> = ({
     setInputMessage,
     setMessages,
 }) => {
+    const [buttonLabel, setButtonLabel] = useState("Send");
     const [sendIsDisabled, setSendIsDisabled] = useState(false);
     const [user] = useAtom(userAtom);
+    const [countdown, setCountdown] = useState<number | null>(null);
     isDebugMode() && console.log({ user });
+
+    useEffect(() => {
+        let timer: NodeJS.Timeout;
+        if (countdown !== null) {
+            timer = setInterval(() => {
+                setCountdown((prev) => {
+                    if (prev !== null && prev > 1) {
+                        return prev - 1;
+                    } else {
+                        clearInterval(timer);
+                        setSendIsDisabled(false);
+                        setButtonLabel("Send");
+                        return null;
+                    }
+                });
+            }, 1000);
+        }
+        return () => clearInterval(timer);
+    }, [countdown]);
 
     const handleSendMessage = async () => {
         if (!inputMessage.trim()) return;
@@ -54,8 +75,9 @@ export const ChatInput: React.FC<ChatInputProps> = ({
         } catch (error) {
             console.error("Error in handleSendMessage:", error);
         } finally {
-            setSendIsDisabled(false);
             setInputMessage("");
+            setCountdown(60); // Start the 1-minute countdown
+            setButtonLabel("Send (60s)");
         }
     };
 
@@ -64,6 +86,12 @@ export const ChatInput: React.FC<ChatInputProps> = ({
             handleSendMessage();
         }
     };
+
+    useEffect(() => {
+        if (countdown !== null) {
+            setButtonLabel(`Send (${countdown}s)`);
+        }
+    }, [countdown]);
 
     return (
         <div className="flex items-center space-x-3">
@@ -78,10 +106,10 @@ export const ChatInput: React.FC<ChatInputProps> = ({
             />
             <button
                 onClick={handleSendMessage}
-                className="p-2 bg-blue-500 text-white rounded disabled:bg-gray-400 disabled:cursor-not-allowed"
+                className="w-32 p-2 bg-blue-500 text-white rounded disabled:bg-gray-400 disabled:cursor-not-allowed"
                 disabled={!inputMessage.trim() || !user || sendIsDisabled}
             >
-                Send
+                {buttonLabel}
             </button>
         </div>
     );

@@ -20,14 +20,18 @@ export const ChatLog = () => {
   const [user] = useAtom(userAtom);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputMessage, setInputMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchInitialChat = async () => {
+      setLoading(true);
       try {
         const response = await getChat({}, user);
         setMessages(response);
       } catch (error) {
         console.error("Error fetching chat:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -39,6 +43,11 @@ export const ChatLog = () => {
       {!user && (
         <div className="text-center text-2xl font-bold text-gray-500">
           Please log in to chat
+        </div>
+      )}
+      {loading && (
+        <div className="flex justify-center items-center py-6">
+          <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent border-solid rounded-full animate-spin"></div>
         </div>
       )}
       <div className="space-y-6 py-6 max-h-[60vh] overflow-y-auto">

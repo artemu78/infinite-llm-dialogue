@@ -39,7 +39,9 @@ export function NewsFeed() {
   }, [user]);
 
   if (isLoading && user) {
-    return <div className="p-4">Loading news...</div>;
+    return (<div className="flex justify-center items-center py-6">
+      <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent border-solid rounded-full animate-spin"></div>
+    </div>);
   }
 
   if (!user) {
@@ -63,9 +65,8 @@ export function NewsFeed() {
               <h2 className="text-xl font-semibold">AI News</h2>
 
               <ChevronDown
-                className={`h-4 w-4 transition-transform ${
-                  isOpen ? "transform rotate-180" : ""
-                }`}
+                className={`h-4 w-4 transition-transform ${isOpen ? "transform rotate-180" : ""
+                  }`}
               />
             </CollapsibleTrigger>
           </div>
