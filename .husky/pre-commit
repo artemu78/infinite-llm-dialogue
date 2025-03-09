@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-npm run bump-version -- --release-as patch
+npm run bump-version-patch
 git add package.json
