@@ -1,6 +1,6 @@
 {
   "name": "vite_react_shadcn_ts",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "type": "module",
   "scripts": {
     "start": "vite",
@@ -44,6 +44,7 @@
     "@radix-ui/react-toggle-group": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.1.4",
     "@react-oauth/google": "^0.12.1",
+    "@sentry/react": "^9.5.0",
     "@supabase/supabase-js": "^2.48.1",
     "@tailwindcss/line-clamp": "^0.4.4",
     "@tanstack/react-query": "^5.56.2",
