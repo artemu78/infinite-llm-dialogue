@@ -5,6 +5,12 @@
   padding: 1rem;
 }
 
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+}
+
 .chatSection {
   flex: 1;
   display: flex;

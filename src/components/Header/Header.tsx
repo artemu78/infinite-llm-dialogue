@@ -51,7 +51,7 @@ const LoginButton: React.FC<LoginButtonProps> = ({ setAtomValue }) => {
 
   return (
     <button className={styles.loginButton} onClick={() => login()} disabled={isLoading}>
-      {isLoading ? 'Logging in...' : 'Login with Google'}
+      {isLoading ? 'Logging in...' : 'Login'}
     </button>
   );
 };
@@ -86,6 +86,7 @@ export const Header: React.FC = () => {
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <header className={styles.header}>
         <div className={styles.headerContent}>
+          <div className={styles.MenuAndLogo}>
           <div className={styles.menuContainer}>
             <button
               className={styles.burgerButton}
@@ -112,6 +113,7 @@ export const Header: React.FC = () => {
             )}
           </div>
           <div className={styles.logo}>Infinite LLM Dialogue</div>
+          </div>
           <div className={styles.user}>
             <span className={styles.userChatName}>Welcome <i>{userName}</i></span>
             {user ? (
