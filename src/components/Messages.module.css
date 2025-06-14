@@ -1,0 +1,197 @@
+.container {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 20px;
+  max-width: 430px;
+  margin: 0 auto;
+  box-shadow: 0px 2px 14px rgba(0, 0, 0, 0.15);
+}
+
+.statusBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  backdrop-filter: blur(20px);
+  padding: 4px 0;
+}
+
+.time {
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 1.333;
+  letter-spacing: -0.16%;
+  color: #000000;
+}
+
+.statusIcons {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.signalIcon,
+.wifiIcon,
+.batteryIcon {
+  width: 16px;
+  height: 16px;
+  background-color: #000000;
+}
+
+.signalIcon {
+  mask: url("/images/signal.svg") no-repeat center;
+  -webkit-mask: url("/images/signal.svg") no-repeat center;
+}
+
+.wifiIcon {
+  mask: url("/images/wifi.svg") no-repeat center;
+  -webkit-mask: url("/images/wifi.svg") no-repeat center;
+}
+
+.batteryIcon {
+  mask: url("/images/battery.svg") no-repeat center;
+  -webkit-mask: url("/images/battery.svg") no-repeat center;
+}
+
+.title {
+  font-family: "Tiempos Headline", serif;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 0.813;
+  color: #383f51;
+  margin-bottom: 24px;
+}
+
+.profileList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+.loadingText {
+  font-family: "Tiempos Headline", serif;
+  font-size: 16px;
+  color: #383f51;
+  opacity: 0.7;
+}
+
+.profileCard {
+  display: flex;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(56, 63, 81, 0.12);
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.profileCard:hover {
+  transform: translateX(4px);
+  background-color: rgba(56, 63, 81, 0.02);
+}
+
+.profileCard:focus {
+  outline: none;
+  background-color: rgba(56, 63, 81, 0.05);
+}
+
+.profileCard:last-child {
+  border-bottom: none;
+}
+
+.profileImageWrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.profileImage {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background-color: rgba(56, 63, 81, 0.1);
+}
+
+.profileImage.loaded {
+  opacity: 1;
+}
+
+.onlineStatus {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 12px;
+  height: 12px;
+  background: #2cc069;
+  border: 2px solid #f1f1f1;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+
+.profileCard:hover .onlineStatus {
+  transform: scale(1.1);
+}
+
+.profileInfo {
+  flex: 1;
+}
+
+.profileName {
+  font-family: "Tiempos Headline", serif;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.083;
+  color: #383f51;
+  margin: 0 0 8px;
+  transition: color 0.2s ease;
+}
+
+.profileCard:hover .profileName {
+  color: #2cc069;
+}
+
+.profileMessage {
+  font-family: "Tiempos Headline", serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.393;
+  color: #383f51;
+  margin: 0 0 12px;
+}
+
+.profileDetails {
+  display: flex;
+  gap: 16px;
+}
+
+.locationWrapper,
+.genderAgeWrapper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: "Tiempos Headline", serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.2;
+  color: #383f51;
+}
+
+.locationWrapper img,
+.genderAgeWrapper img {
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+.profileCard:hover .locationWrapper img,
+.profileCard:hover .genderAgeWrapper img {
+  opacity: 1;
+}
