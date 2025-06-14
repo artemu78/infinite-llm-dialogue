@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "Zapier": {
+      "url": "https://actions.zapier.com/mcp/sk-ak-gtud5UCSiuzWG5p3HEnzgB6ivE/sse",
+      "actions": {
+        "sendTelegramMessage": {
+          "message": "Hello from Cursor!"
+        }
+      }
+    }
+  }
+}

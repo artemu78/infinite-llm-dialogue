@@ -39,7 +39,7 @@ export const aiRequest = async (
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "authorization": `Bearer ${user?.access_token}`,
+        authorization: `Bearer ${user?.access_token}`,
       },
       body: JSON.stringify({
         userInput,
@@ -51,12 +51,11 @@ export const aiRequest = async (
 
     if (!response.ok) {
       if (response.status === 429) {
-        alert("You are being rate limited. Please try again later.\n" + data.error);
+        alert("You are being rate limited. Please try again later.\n");
       }
       throw new Error("Network response was not ok.");
     }
-    
-    
+
     // Transform the AI responses into ChatMessage format
     return data.responses.map((aiResponse: AIPersonalityResponse) => ({
       id: new Date().getTime(),
@@ -91,7 +90,9 @@ interface NewsItem {
   url: string;
 }
 
-export const fetchNews = async (user: User): Promise<{
+export const fetchNews = async (
+  user: User
+): Promise<{
   news: NewsItem[];
   error: string | null;
 }> => {
@@ -100,7 +101,7 @@ export const fetchNews = async (user: User): Promise<{
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "authorization": `Bearer ${user?.access_token}`,
+        authorization: `Bearer ${user?.access_token}`,
       },
       body: JSON.stringify({
         ...(isDebugMode() && { debug: "true" }),
