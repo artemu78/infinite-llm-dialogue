@@ -77,6 +77,13 @@ export const aiRequest = async (
   }
 };
 
+export const checkChatMessages = async (
+  userName: string,
+  user?: User
+): Promise<ChatMessage[]> => {
+  return aiRequest("", userName, user);
+};
+
 interface NewsItem {
   title: string;
   description: string;

@@ -3,7 +3,7 @@ import { userAtom } from "@/lib/atoms";
 import { useState, useEffect } from "react";
 import { Message } from "./Message";
 import { ChatInput } from "./ChatInput";
-import { type ChatMessage } from "@/lib/utils";
+import { type ChatMessage, checkChatMessages } from "@/lib/utils"; // Import checkChatMessages
 import { getChat } from "@/lib/api";
 
 // Helper function to assign colors to different personalities
@@ -36,6 +36,41 @@ export const ChatLog = () => {
     };
 
     user && fetchInitialChat();
+  }, [user]);
+
+  // useEffect for periodic message fetching
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
+
+    const determineUserName = () => {
+      if (user.user_metadata?.user_name) {
+        return user.user_metadata.user_name;
+      }
+      if (user.email) {
+        return user.email;
+      }
+      return "User"; // Fallback username
+    };
+
+    const intervalId = setInterval(async () => {
+      try {
+        const userName = determineUserName();
+        const newMessages = await checkChatMessages(userName, user);
+
+        setMessages((prevMessages) => {
+          const existingMessageIds = new Set(prevMessages.map(msg => msg.id).filter(id => id !== undefined));
+          const trulyNewMessages = newMessages.filter(msg => msg.id === undefined || !existingMessageIds.has(msg.id));
+          return [...prevMessages, ...trulyNewMessages];
+        });
+
+      } catch (error) {
+        console.error("Error periodically fetching chat messages:", error);
+      }
+    }, 5000); // Fetch every 5 seconds
+
+    return () => clearInterval(intervalId); // Cleanup on component unmount or user change
   }, [user]);
   
   return (
