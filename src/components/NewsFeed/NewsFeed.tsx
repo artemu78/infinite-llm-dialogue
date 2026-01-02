@@ -1,5 +1,5 @@
 import { useAtom } from "jotai";
-import { userAtom } from "@/lib/atoms";
+import { userAtom, appStateAtom } from "@/lib/atoms";
 import { useEffect, useState } from "react";
 import { fetchNews } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
@@ -19,6 +19,7 @@ interface NewsItem {
 
 export function NewsFeed() {
   const [user] = useAtom(userAtom);
+  const [appState, setAppState] = useAtom(appStateAtom);
   const [news, setNews] = useState<NewsItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -68,9 +69,8 @@ export function NewsFeed() {
               <h2 className="text-xl font-semibold">AI News</h2>
 
               <ChevronDown
-                className={`h-4 w-4 transition-transform ${
-                  isOpen ? "transform rotate-180" : ""
-                }`}
+                className={`h-4 w-4 transition-transform ${isOpen ? "transform rotate-180" : ""
+                  }`}
               />
             </CollapsibleTrigger>
           </div>

@@ -1,4 +1,4 @@
-export interface User {
+export interface IUser {
   email: string;
   email_verified: boolean;
   family_name: string;
@@ -7,4 +7,10 @@ export interface User {
   picture: string;
   sub: string;
   access_token?: string;
+}
+
+export interface IAppState {
+  isOnline: boolean;
+  lastNewsUpdateTime: Date;
+  lastNewsItemId: number;
 }

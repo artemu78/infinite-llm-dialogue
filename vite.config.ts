@@ -1,7 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
-import { componentTagger } from "lovable-tagger";
 import { version } from "./package.json";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 
@@ -16,15 +15,12 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react(),
-    mode === "development" && componentTagger(),
     sentryVitePlugin({
       authToken: process.env.SENTRY_AUTH_TOKEN,
       org: "artem-reva",
       project: "javascript-react",
     }),
-  ].filter(
-    Boolean
-  ),
+  ].filter(Boolean),
   base: mode === "production" ? "/infinite-llm-dialogue/" : "/",
   define: {
     "import.meta.env.VITE_APP_VERSION": JSON.stringify(version),

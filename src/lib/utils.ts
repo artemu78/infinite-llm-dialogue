@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { API_URL } from "@/config";
-import type { User } from "@/lib/types";
+import type { IUser } from "@/lib/types";
 
 // Utility function to check for "debug" URL parameter
 export const isDebugMode = () => {
@@ -32,9 +32,12 @@ interface AIResponse {
 export const aiRequest = async (
   userInput: string,
   userName: string,
-  user?: User
+  user?: IUser
 ): Promise<ChatMessage[]> => {
   try {
+    if (user.access_token === "LOCALLY") {
+      return [];
+    }
     const response = await fetch(API_URL, {
       method: "POST",
       headers: {
@@ -78,7 +81,7 @@ export const aiRequest = async (
 
 export const checkChatMessages = async (
   userName: string,
-  user?: User
+  user?: IUser
 ): Promise<ChatMessage[]> => {
   return aiRequest("", userName, user);
 };
@@ -91,12 +94,25 @@ interface NewsItem {
 }
 
 export const fetchNews = async (
-  user: User
+  user: IUser
 ): Promise<{
   news: NewsItem[];
   error: string | null;
 }> => {
   try {
+    if (user.access_token === "LOCALLY") {
+      return {
+        news: [
+          {
+            title: "News title",
+            description: "Here is the news content",
+            url: "https://google.com",
+            publishedAt: "10 dec",
+          },
+        ],
+        error: "",
+      };
+    }
     const response = await fetch(`${API_URL}/news`, {
       method: "POST",
       headers: {
