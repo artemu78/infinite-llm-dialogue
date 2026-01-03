@@ -114,7 +114,7 @@ export const fetchNews = async (
       };
     }
     const response = await fetch(`${API_URL}/news`, {
-      method: "POST",
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
         authorization: `Bearer ${user?.access_token}`,
