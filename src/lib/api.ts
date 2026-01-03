@@ -29,12 +29,12 @@ export async function getChat(
       ];
     }
     const response = await fetch(`${API_URL}/getchat`, {
-      method: "POST",
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
         authorization: `Bearer ${user?.access_token}`,
       },
-      body: JSON.stringify(request),
+      // Body is not allowed in GET requests
     });
 
     if (!response.ok) {
