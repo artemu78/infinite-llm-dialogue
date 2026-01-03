@@ -99,6 +99,7 @@ export const fetchNews = async (
   news: NewsItem[];
   error: string | null;
 }> => {
+  const debugString = isDebugMode() ? 'debug' : '';
   try {
     if (user.access_token === "LOCALLY") {
       return {
@@ -113,7 +114,7 @@ export const fetchNews = async (
         error: "",
       };
     }
-    const response = await fetch(`${API_URL}/news`, {
+    const response = await fetch(`${API_URL}/news?${debugString}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

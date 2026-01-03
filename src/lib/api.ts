@@ -1,5 +1,7 @@
 import { API_URL } from "@/config";
 import { type ChatMessage } from "@/lib/utils";
+import { isDebugMode } from "@/lib/utils";
+
 export interface ChatResponse {
   message: string;
   id: string;
@@ -17,6 +19,7 @@ export async function getChat(
   request: ChatRequest,
   user: IUser
 ): Promise<ChatMessage[]> {
+  const debugString = isDebugMode() ? 'debug' : '';
   try {
     if (user.access_token === "LOCALLY") {
       return [
@@ -28,13 +31,12 @@ export async function getChat(
         },
       ];
     }
-    const response = await fetch(`${API_URL}/getchat`, {
+    const response = await fetch(`${API_URL}/getchat?${debugString}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         authorization: `Bearer ${user?.access_token}`,
       },
-      // Body is not allowed in GET requests
     });
 
     if (!response.ok) {
