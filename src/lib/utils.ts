@@ -119,9 +119,6 @@ export const fetchNews = async (
         "Content-Type": "application/json",
         authorization: `Bearer ${user?.access_token}`,
       },
-      body: JSON.stringify({
-        ...(isDebugMode() && { debug: "true" }),
-      }),
     });
     const data = await response.json();
 
