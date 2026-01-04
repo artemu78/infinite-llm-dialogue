@@ -47,14 +47,14 @@ export const ChatLog = () => {
   }, [user]);
 
   return (
-    <div>
+    <div className="relative">
       {!user && (
         <div className="text-center text-2xl font-bold text-gray-500">
           Please log in to chat
         </div>
       )}
       {loading && (
-        <div className="flex justify-center items-center py-6 sticky top-0">
+        <div className="flex justify-center items-center py-6 absolute top-0 left-1/2 opacity-10">
           <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent border-solid rounded-full animate-spin"></div>
         </div>
       )}
