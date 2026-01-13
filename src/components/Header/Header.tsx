@@ -122,7 +122,7 @@ export const Header: React.FC = () => {
               )}
             </div>
             <div className={styles.logo}>
-              Infinite LLM Dialogue{" "}
+              Infinite LLM Dialogue for test{" "}
               <div className={styles.signDot + " " + backgroundColorClass} />
             </div>
           </div>
