@@ -28,7 +28,7 @@ jobs:
           npm install @rollup/rollup-linux-x64-gnu
 
       - name: Build
-        run: npm run build
+        run: npm run build -- --base=/infinite-llm-dialogue/
         env:
           VITE_API_URL: ${{ vars.VITE_API_URL }}
 

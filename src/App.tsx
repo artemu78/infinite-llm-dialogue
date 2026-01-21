@@ -21,8 +21,7 @@ const App = () => {
     console.log(`App version: ${version}`);
   }, []);
 
-  const isProduction = import.meta.env.MODE === "production";
-  const basename = isProduction ? "/infinite-llm-dialogue" : "/";
+  const basename = import.meta.env.BASE_URL;
 
   return (
     <QueryClientProvider client={queryClient}>
